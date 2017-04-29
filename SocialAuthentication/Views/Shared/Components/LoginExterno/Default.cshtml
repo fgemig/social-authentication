@@ -1,0 +1,39 @@
+﻿@model List<Microsoft.AspNetCore.Http.Authentication.AuthenticationDescription>
+
+<div class="col-md-4">
+    <section>
+        <h4>Use um outro serviço para fazer o Login:</h4>
+        <hr />
+        @{
+            if (Model.Count == 0)
+            {
+                <div>
+                    <p>
+                        Não existem serviços externos configurados para autenticação!
+                    </p>
+                </div>
+            }
+            else
+            {
+                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                    <div class="col-md-9 social-buttons">
+                        @foreach (var provider in Model)
+                        {
+
+                            var faClassName = provider.DisplayName == "Microsoft" ? "windows" : provider.DisplayName.ToLower();
+
+                            <button type="submit"
+                                    class="btn btn-block btn-social btn-@provider.DisplayName.ToLower()"
+                                    name="provider"
+                                    value="@provider.AuthenticationScheme"
+                                    title="Log in using your @provider.DisplayName account">
+                                <span class="fa fa-@faClassName"></span>Entrar com o @provider.DisplayName
+                            </button>
+                        }
+                    </div>
+                </form>
+            }
+        }
+
+    </section>
+</div>
